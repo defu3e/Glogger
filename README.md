@@ -13,8 +13,8 @@ if err != nil {
   log.Fatal(err)
 }
 
-glog.Info("Тестовая информация, которая запишется в лог-файл")
-glog.Error(errors.New("Ошибка которая запишется в лог-файл"))
+glog.Info("Information that will be written to the log file")
+glog.Error(errors.New("Error that will be written to the log file"))
 	
 glog.Close()
 ```
