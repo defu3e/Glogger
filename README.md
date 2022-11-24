@@ -8,7 +8,7 @@ import glogger "test/Glogger"
 
 ...
 
-glog, err := glogger.Init("log.txt") // init log file (created if not exist)
+glog, err := glogger.Init("log.txt") 
 if err != nil { 
   log.Fatal(err)
 }
