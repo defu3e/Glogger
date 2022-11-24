@@ -1,12 +1,35 @@
 package glogger
 
 import (
-	"log"
 	"os"
+	"time"
+)
+
+const (
+	YYYYMMDD  = "02.01.2006"
+	HHMMSS24h = "15:04:05"
+	INF       = iota
+	ERR
 )
 
 type Glogger struct {
 	f *os.File
+}
+
+func (w *Glogger) Write(str string, mode int) (int, error) {
+	ts := time.Now().UTC().Format(YYYYMMDD + " " + HHMMSS24h)
+	wstr := "["
+
+	switch mode {
+	case INF:
+		wstr += "INF"
+	case ERR:
+		wstr += "ERR"
+	}
+
+	wstr += "] " + ts + " | " + str + "\n" // [INF] YYYYMMDD HHMMSS24h | Текст лога
+
+	return w.f.WriteString(wstr)
 }
 
 func Init(fileName string) (*Glogger, error) {
@@ -15,17 +38,15 @@ func Init(fileName string) (*Glogger, error) {
 		return nil, err
 	}
 
-	log.SetOutput(f)
-
 	return &Glogger{f}, nil
 }
 
 func (l *Glogger) Info(str string) {
-	log.Println(str)
+	l.Write(str, INF)
 }
 
 func (l *Glogger) Error(err error) {
-	log.Println(err)
+	l.Write(err.Error(), ERR)
 }
 
 func (l *Glogger) Close() error {
